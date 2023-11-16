@@ -1,38 +1,19 @@
-type QuestionAns = {
-    question: string
-    ans: string
-}
-
-const getBlockedUrl = async (): Promise<string[]> => {
+const _getBlockedUrl = async (): Promise<string[]> => {
     const l = (await chrome.storage.local.get("url"))["url"] as string[] | null | undefined
     if (!l) {
-        setBlockUrl([])
+        _setBlockUrl([])
         return new Promise((r, e) => { r([]) })
     }
     return l
 }
 
-const setBlockUrl = async (e: string[]) => {
+const _setBlockUrl = async (e: string[]) => {
     const s = new Set<string>(e)
     e = Array.from(s)
     await chrome.storage.local.set({
         "url": e
     })
 }
-
-const getQuestion = async () => {
-    const one = Math.floor(Math.random() * 100)
-    const two = Math.floor(Math.random() * 100)
-    return {
-        question: `${one} + ${two}`,
-        ans: one + two
-    }
-}
-
-const resetDb = () => {
-    setBlockUrl([])
-}
-
 const createListView = (target: HTMLTableElement, e: string[]) => {
     console.log("LOG: running createListView");
     target.innerHTML = ``
@@ -98,23 +79,23 @@ const getCurrentUrl = async () => {
     addButton.onclick = async (e) => {
         console.log("LOG: running addbutton.onclick event");
         const url = await getCurrentUrl()
-        const urls = await getBlockedUrl()
+        const urls = await _getBlockedUrl()
         console.log(urls);
         const urlParts = url.split("/")
-        if(urlParts[0] === "chrome-extension"){
+        if (urlParts[0] === "chrome-extension") {
             return
         }
         const websiteLink = urlParts[2]
-        if(websiteLink === undefined){
+        if (websiteLink === undefined) {
             return
         }
-        setBlockUrl([...urls, websiteLink])
-        createListView(table, await getBlockedUrl())
+        _setBlockUrl([...urls, websiteLink])
+        createListView(table, await _getBlockedUrl())
     }
 
     removeButton.onclick = async (e) => {
         console.log("LOG: running removeButton.onclock event");
     }
 
-    createListView(table, await getBlockedUrl())
+    createListView(table, await _getBlockedUrl())
 })()
