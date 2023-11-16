@@ -1,0 +1,61 @@
+<html>
+
+<body>
+  <h1>Block website</h1>
+  <table></table>
+  <footer>
+    <button id="add">ADD</button>
+    <button cancel id="remove">REMOVE</button>
+  </footer>
+</body>
+<script src="popup.js"></script>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  body{
+    gap:1rem;
+    height: 100%;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: space-around;
+  }
+  table{
+    width: 100%;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  tr:nth-child(odd){
+    background-color: antiquewhite;
+  }
+  h1 {
+    font-family: monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  footer{
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem;
+  }
+  button{
+    border: none;
+    background: gray;
+    color: white;
+    height: 50px;
+    width: 70px;
+    border-radius: 10px;
+    background: limegreen;
+  }
+  button[cancel]{
+    background-color: red;
+  }
+  
+</style>
+
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "everyday_typetest",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "setup": "npx tsc --init",
+    "build": "npx tsc && node ./build.cjs",
+    "watch": "npx nodemon ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/chrome": "^0.0.251",
+    "typescript": "^5.2.2"
+  }
+}
