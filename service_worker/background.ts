@@ -53,6 +53,10 @@ chrome.runtime.onMessage.addListener(async (m, s, r) => {
 
   if (m === "ok") {
     const id = s.tab?.id
+    const winId = s.tab?.windowId
+    if(!winId){
+      throw new Error("window id not found");
+    }
     if (!id) {
       throw new Error("id not found")
     }
@@ -63,14 +67,15 @@ chrome.runtime.onMessage.addListener(async (m, s, r) => {
     chrome.tabs.update(id, {
       url: url
     })
-    u.push(id)
+    u.push(winId)
+    e.delete(id)
   }
 })
 
 chrome.tabs.onActivated.addListener((e) => {
   console.log("LOG: running chrome.tabs.onActivated.addListener")
   for(const i of u){
-    if(i === e.tabId){
+    if(i === e.windowId){
       console.log("LOG: skip tab",e.tabId);
       return
     }
@@ -78,10 +83,11 @@ chrome.tabs.onActivated.addListener((e) => {
   main(e.tabId)
 })
 
-chrome.tabs.onUpdated.addListener((e) => {
+chrome.tabs.onUpdated.addListener(async (e) => {
   console.log("LOG: running chrome.tabs.onUpdated.addListener")
+  const tab = await chrome.tabs.get(e)
   for(const i of u){
-    if(i === e){
+    if(i === tab.windowId){
       console.log("LOG: skip tab",e);
       return
     }

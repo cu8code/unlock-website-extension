@@ -1,19 +1,20 @@
-const _getBlockedUrl = async (): Promise<string[]> => {
+const getBlockedUrl = async (): Promise<string[]> => {
     const l = (await chrome.storage.local.get("url"))["url"] as string[] | null | undefined
     if (!l) {
-        _setBlockUrl([])
+        setBlockUrl([])
         return new Promise((r, e) => { r([]) })
     }
     return l
 }
 
-const _setBlockUrl = async (e: string[]) => {
+const setBlockUrl = async (e: string[]) => {
     const s = new Set<string>(e)
     e = Array.from(s)
     await chrome.storage.local.set({
         "url": e
     })
 }
+
 const createListView = (target: HTMLTableElement, e: string[]) => {
     console.log("LOG: running createListView");
     target.innerHTML = ``
@@ -79,7 +80,7 @@ const getCurrentUrl = async () => {
     addButton.onclick = async (e) => {
         console.log("LOG: running addbutton.onclick event");
         const url = await getCurrentUrl()
-        const urls = await _getBlockedUrl()
+        const urls = await getBlockedUrl()
         console.log(urls);
         const urlParts = url.split("/")
         if (urlParts[0] === "chrome-extension") {
@@ -89,13 +90,13 @@ const getCurrentUrl = async () => {
         if (websiteLink === undefined) {
             return
         }
-        _setBlockUrl([...urls, websiteLink])
-        createListView(table, await _getBlockedUrl())
+        setBlockUrl([...urls, websiteLink])
+        createListView(table, await getBlockedUrl())
     }
 
     removeButton.onclick = async (e) => {
         console.log("LOG: running removeButton.onclock event");
     }
 
-    createListView(table, await _getBlockedUrl())
+    createListView(table, await getBlockedUrl())
 })()

@@ -28,6 +28,7 @@ if(!question){
 question.innerHTML = `
     <h1>${q.question}</h1>
 `
+ans.focus()
 
 button.addEventListener("click", (e) => {
     console.log("LOG: button clicked",ans.value);
