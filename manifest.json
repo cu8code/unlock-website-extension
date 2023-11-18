@@ -4,10 +4,10 @@
   "description": "Basic Level Extension",
   "version": "0.0.1",
   "action": {
-    "default_popup":"./action/popup.html"
+    "default_popup":"action/popup.html"
   },
   "background":{
-    "service_worker": "./service_worker/background.js",
+    "service_worker": "service_worker/background.js",
     "type":"module"
   },
   "permissions": [

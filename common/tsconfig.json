@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
+    "composite": true, /* Enable constraints that allow a TypeScript project to be used with project references. */
     "target": "es2016", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "module": "ES6", /* Specify what module code is generated. */
     "rootDir": "./", /* Specify the root folder within your source files. */
     "types": [
       "chrome"
     ], /* Specify type package names to be included without being referenced in a source file. */
-    "outDir": "../.dist/service_worker/", /* Specify an output folder for all emitted files. */
+    "declaration": true, /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
+    "declarationMap": true, /* Create sourcemaps for d.ts files. */
+    "outDir": "../.dist/common/", /* Specify an output folder for all emitted files. */
     "removeComments": true, /* Disable emitting comments. */
     "esModuleInterop": true, /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
     "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
@@ -27,11 +30,6 @@
     "noPropertyAccessFromIndexSignature": true, /* Enforces using indexed accessors for keys declared using an indexed type. */
     "allowUnusedLabels": true, /* Disable error reporting for unused labels. */
     "allowUnreachableCode": true, /* Disable error reporting for unreachable code. */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
-  },
-  "references": [
-    {
-      "path": "../common/"
-    }
-  ]
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+  }
 }

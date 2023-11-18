@@ -1,25 +1,45 @@
+import { getBlockedUrl, setBlockUrl, getUnblockedUrl } from "../common/common.js"
+
 const e = new Map<number, string>()
 const u: number[] = []
 
-const getBlockedUrl = async (): Promise<string[]> => {
-  const l = (await chrome.storage.local.get("url"))["url"] as string[] | null | undefined
-  if (!l) {
-    setBlockUrl([])
-    return new Promise((r, e) => { r([]) })
-  }
-  return l
-}
-
-const setBlockUrl = async (e: string[]) => {
-  const s = new Set<string>(e)
-  e = Array.from(s)
-  await chrome.storage.local.set({
-    "url": e
-  })
-}
-
 const resetDb = () => {
   setBlockUrl([])
+}
+
+const extractUrl = (e: string) => {
+  const parts = e.split("/")
+  const url = parts[2]
+  return url
+}
+
+const isInUnblocked = async (tabId: number): Promise<boolean> => {
+  console.log("LOG: running isInUnblocked on tabid", tabId);
+
+  const unblockedObj = await getUnblockedUrl()
+  console.log("DEBUG:", unblockedObj);
+
+  const tab = await chrome.tabs.get(tabId)
+  console.log("LOG: running chrome.tabs.onActivated.addListener")
+  for (const i of unblockedObj) {
+    if (tab.windowId === i.windowId) {
+      const url = tab.url
+      if (!url) {
+        throw new Error("url not found");
+      }
+      for (const ur of i.allowedWebsite) {
+        const u = extractUrl(url)
+        if (!u) {
+          throw new Error("invalid value of u");
+        }
+        if (ur === u) {
+          console.log("LOG: skip tab", e);
+          return true
+        }
+      }
+    }
+  }
+  return false
 }
 
 const main = async (id: number) => {
@@ -54,7 +74,7 @@ chrome.runtime.onMessage.addListener(async (m, s, r) => {
   if (m === "ok") {
     const id = s.tab?.id
     const winId = s.tab?.windowId
-    if(!winId){
+    if (!winId) {
       throw new Error("window id not found");
     }
     if (!id) {
@@ -72,25 +92,21 @@ chrome.runtime.onMessage.addListener(async (m, s, r) => {
   }
 })
 
-chrome.tabs.onActivated.addListener((e) => {
+chrome.tabs.onActivated.addListener(async (e) => {
+  const unblockedObj = await getUnblockedUrl()
   console.log("LOG: running chrome.tabs.onActivated.addListener")
-  for(const i of u){
-    if(i === e.windowId){
-      console.log("LOG: skip tab",e.tabId);
-      return
-    }
+  if (await isInUnblocked(e.tabId)) {
+    console.log("LOG: skiping current tab", e);
+    return
   }
   main(e.tabId)
 })
 
 chrome.tabs.onUpdated.addListener(async (e) => {
   console.log("LOG: running chrome.tabs.onUpdated.addListener")
-  const tab = await chrome.tabs.get(e)
-  for(const i of u){
-    if(i === tab.windowId){
-      console.log("LOG: skip tab",e);
-      return
-    }
+  if (await isInUnblocked(e)) {
+    console.log("LOG: skiping current tab", e)
+    return
   }
   main(e)
 })

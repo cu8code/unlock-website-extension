@@ -1,19 +1,4 @@
-const getBlockedUrl = async (): Promise<string[]> => {
-    const l = (await chrome.storage.local.get("url"))["url"] as string[] | null | undefined
-    if (!l) {
-        setBlockUrl([])
-        return new Promise((r, e) => { r([]) })
-    }
-    return l
-}
-
-const setBlockUrl = async (e: string[]) => {
-    const s = new Set<string>(e)
-    e = Array.from(s)
-    await chrome.storage.local.set({
-        "url": e
-    })
-}
+import { getBlockedUrl, setBlockUrl } from "../common/common.js"
 
 const createListView = (target: HTMLTableElement, e: string[]) => {
     console.log("LOG: running createListView");
