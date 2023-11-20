@@ -6,19 +6,14 @@ import {
   setTempCash,
   getTempCash,
   getUnBlockedID,
-  setNewUnblockedID
+  setNewUnblockedID,
+  extractUrl
 } from "../common/common.js"
 
 const e = new Map<number, string>()
 
 const resetDb = () => {
   setBlockUrl([])
-}
-
-const extractUrl = (e: string) => {
-  const parts = e.split("/")
-  const url = parts[2]
-  return url
 }
 
 const isTabUnblocked = async (tabId: number): Promise<boolean> => {

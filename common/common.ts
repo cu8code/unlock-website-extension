@@ -66,5 +66,11 @@ export const setNewUnblockedID = async (id: number) => {
     if (!url) {
         url = []
     }
-    return chrome.storage.session.set({"blockedId":[id, ...url]})
+    return chrome.storage.session.set({ "blockedId": [id, ...url] })
+}
+
+export const extractUrl = (e: string) => {
+    const parts = e.split("/")
+    const url = parts[2]
+    return url
 }

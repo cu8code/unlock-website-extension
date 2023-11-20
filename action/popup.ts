@@ -1,4 +1,4 @@
-import { getBlockedUrl, setBlockUrl } from "../common/common.js"
+import { extractUrl, getBlockedUrl, setBlockUrl } from "../common/common.js"
 
 const createListView = (target: HTMLTableElement, e: string[]) => {
     console.log("LOG: running createListView");
@@ -81,6 +81,13 @@ const getCurrentUrl = async () => {
 
     removeButton.onclick = async (e) => {
         console.log("LOG: running removeButton.onclock event");
+        // const url = extractUrl(await getCurrentUrl())
+        // let urls = await getBlockedUrl()
+        // const set = new Set(url)
+        // urls = Array.from(set)
+        // urls.pop()
+        setBlockUrl([])
+        createListView(table, await getBlockedUrl())
     }
 
     createListView(table, await getBlockedUrl())
