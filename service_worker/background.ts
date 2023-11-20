@@ -1,7 +1,6 @@
-import { getBlockedUrl, setBlockUrl, getUnblockedUrl } from "../common/common.js"
+import { getBlockedUrl, setBlockUrl, getUnblockedUrl, setUnblockedUrl } from "../common/common.js"
 
 const e = new Map<number, string>()
-const u: number[] = []
 
 const resetDb = () => {
   setBlockUrl([])
@@ -20,14 +19,13 @@ const isInUnblocked = async (tabId: number): Promise<boolean> => {
   console.log("DEBUG:", unblockedObj);
 
   const tab = await chrome.tabs.get(tabId)
-  console.log("LOG: running chrome.tabs.onActivated.addListener")
   for (const i of unblockedObj) {
     if (tab.windowId === i.windowId) {
       const url = tab.url
       if (!url) {
         throw new Error("url not found");
       }
-      for (const ur of i.allowedWebsite) {
+      for (const ur of i.allowedWebsiteThatAreInBlockList) {
         const u = extractUrl(url)
         if (!u) {
           throw new Error("invalid value of u");
@@ -87,8 +85,11 @@ chrome.runtime.onMessage.addListener(async (m, s, r) => {
     chrome.tabs.update(id, {
       url: url
     })
-    u.push(winId)
     e.delete(id)
+    setUnblockedUrl([{
+      allowedWebsiteThatAreInBlockList: [],
+      windowId:winId
+    }])
   }
 })
 

@@ -1,6 +1,6 @@
 export type unblockedUrl = {
     windowId: number,
-    allowedWebsite: string[]
+    allowedWebsiteThatAreInBlockList: string[]
 }
 
 export const setUnblockedUrl = async (i: unblockedUrl[]) => {
@@ -9,6 +9,15 @@ export const setUnblockedUrl = async (i: unblockedUrl[]) => {
     const l = (await chrome.storage.session.set({
         "unblockedUrl": i
     }))
+}
+
+export const getUnblockedUrl = async (): Promise<unblockedUrl[]> => {
+    const l = (await chrome.storage.session.get("unblockedUrl"))["unblockedUrl"] as unblockedUrl[] | null | undefined
+    if (!l) {
+        await setUnblockedUrl([])
+        return new Promise((r, e) => { r([]) })
+    }
+    return l
 }
 
 export const getBlockedUrl = async (): Promise<string[]> => {
@@ -26,12 +35,4 @@ export const setBlockUrl = async (e: string[]) => {
     await chrome.storage.local.set({
         "url": e
     })
-}
-export const getUnblockedUrl = async (): Promise<unblockedUrl[]> => {
-    const l = (await chrome.storage.session.get("unblockedUrl"))["unblockedUrl"] as unblockedUrl[] | null | undefined
-    if (!l) {
-        setUnblockedUrl([])
-        return new Promise((r, e) => { r([]) })
-    }
-    return l
 }
