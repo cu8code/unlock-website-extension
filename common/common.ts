@@ -1,9 +1,9 @@
-export type unblockedUrl = {
+export type windowObj = {
     windowId: number,
     allowedWebsiteThatAreInBlockList: string[]
 }
 
-export const setUnblockedUrl = async (i: unblockedUrl[]) => {
+export const setWindowUnblockedUrlObj = async (i: windowObj[]) => {
     const s = new Set(i)
     i = Array.from(s)
     const l = (await chrome.storage.session.set({
@@ -11,10 +11,10 @@ export const setUnblockedUrl = async (i: unblockedUrl[]) => {
     }))
 }
 
-export const getUnblockedUrl = async (): Promise<unblockedUrl[]> => {
-    const l = (await chrome.storage.session.get("unblockedUrl"))["unblockedUrl"] as unblockedUrl[] | null | undefined
+export const getWindowUnblockedUrlObj = async (): Promise<windowObj[]> => {
+    const l = (await chrome.storage.session.get("unblockedUrl"))["unblockedUrl"] as windowObj[] | null | undefined
     if (!l) {
-        await setUnblockedUrl([])
+        await setWindowUnblockedUrlObj([])
         return new Promise((r, e) => { r([]) })
     }
     return l
@@ -35,4 +35,36 @@ export const setBlockUrl = async (e: string[]) => {
     await chrome.storage.local.set({
         "url": e
     })
+}
+
+export type TempCash = {
+    tabId: number,
+    originalUrl: string
+}
+
+export const setTempCash = async (e: TempCash) => {
+    let cash = await getTempCash()
+    if (!cash) {
+        cash = []
+    }
+    console.log(cash, e);
+    cash.push(e)
+    chrome.storage.local.set({
+        "temp": cash
+    })
+}
+export const getTempCash = async () => {
+    return (await chrome.storage.local.get("temp"))["temp"] as TempCash[] | undefined | null
+}
+
+export const getUnBlockedID = async () => {
+    return (await chrome.storage.session.get("blockedId"))["blockedId"] as number[] | undefined | null
+}
+
+export const setNewUnblockedID = async (id: number) => {
+    let url = await getUnBlockedID()
+    if (!url) {
+        url = []
+    }
+    return chrome.storage.session.set({"blockedId":[id, ...url]})
 }

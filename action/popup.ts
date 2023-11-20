@@ -52,13 +52,13 @@ const getCurrentUrl = async () => {
     const removeButton = document.querySelector("#remove") as HTMLButtonElement | null
     const table = document.querySelector("table")
 
-    if (table === null) {
+    if (!table) {
         throw new Error("no target table found");
     }
-    if (addButton === null) {
+    if (!addButton) {
         throw new Error("add button not found");
     }
-    if (removeButton === null) {
+    if (!removeButton) {
         throw new Error("remove button not found");
     }
 
