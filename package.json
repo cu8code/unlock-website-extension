@@ -7,11 +7,17 @@
     "build": "bash build.bash",
     "watch": "npx nodemon ."
   },
-  "keywords": ["test"],
+  "keywords": [
+    "test"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/chrome": "^0.0.251",
     "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
   }
 }

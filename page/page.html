@@ -10,11 +10,25 @@
         width: 100px;
         height: 100px;
     }
+    body{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        gap: 2rem;
+    }
+    input{
+        max-width: 200px;
+    }
 </style>
 <body>
     <div class="question"></div>
     <input  name="ans" id="ans" aria-label="some" placeholder="input"></input>
     <button id="submit">submit</button>
+    <!-- <label for="code"></label>
+    <textarea name="code" id="code" cols="50" rows="100"></textarea> -->
 </body>
 <script src="page.js" type="module"></script>
 </html>

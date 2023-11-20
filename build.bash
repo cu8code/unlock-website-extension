@@ -1,4 +1,5 @@
 mkdir .dist -p
+# npx webpack
 
 cd action
 npx tsc --build .
