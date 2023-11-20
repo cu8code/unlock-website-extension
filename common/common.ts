@@ -49,12 +49,12 @@ export const setTempCash = async (e: TempCash) => {
     }
     console.log(cash, e);
     cash.push(e)
-    chrome.storage.local.set({
+    chrome.storage.session.set({
         "temp": cash
     })
 }
 export const getTempCash = async () => {
-    return (await chrome.storage.local.get("temp"))["temp"] as TempCash[] | undefined | null
+    return (await chrome.storage.session.get("temp"))["temp"] as TempCash[] | undefined | null
 }
 
 export const getUnBlockedID = async () => {
