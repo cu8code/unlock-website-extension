@@ -48,6 +48,8 @@ const getQuestion = () => {
 }
 
 const q = getQuestion()
+console.log(q);
+
 const question = document.querySelector("div")
 const ans = document.querySelector("input")
 const button = document.querySelector("button")
